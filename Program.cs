@@ -5,39 +5,23 @@ namespace CatWorx.BadgeMaker
 {
   class Program
   {
-    static List<Employee> GetEmployees()
-    {
-      List<Employee> employees = new List<Employee>();
-      while (true)
-      {
-        Console.WriteLine("Please enter a name: (leave empty to exit): ");
-        string firstName = Console.ReadLine();
-        if (firstName == "")
-        {
-          break;
-        }
-
-        Console.Write("Enter last name: ");
-        string lastName = Console.ReadLine();
-        Console.Write("Enter Id: ");
-        int id = Int32.Parse(Console.ReadLine());
-        Console.Write("Enter Photo URL: ");
-        string photoUrl = Console.ReadLine();
-
-
-        // Create a new Employee instance
-        Employee currentEmployee = new Employee(firstName, lastName, id, photoUrl);
-        employees.Add(currentEmployee);
-      }
-      // This is important!
-      return employees;
-    }
     static void Main(string[] args)
     {
-      List<Employee> employees = GetEmployees();
-      Util.PrintEmployees(employees);
-      Util.MakeCSV(employees);
-      Util.MakeBadges(employees);
+      bool response = PeopleFetcher.CheckTask();
+      if (response == true)
+      {
+        List<Employee> employees = PeopleFetcher.GetFromAPI();
+        Util.PrintEmployees(employees);
+        Util.MakeCSV(employees);
+        Util.MakeBadges(employees);
+      }
+      if (response == false)
+      {
+        List<Employee> employees = PeopleFetcher.GetEmployees();
+        Util.PrintEmployees(employees);
+        Util.MakeCSV(employees);
+        Util.MakeBadges(employees);
+      }
     }
   }
 }
